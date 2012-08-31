@@ -1962,6 +1962,9 @@ sub _serialize {
 
     chomp( my @stanzas = grep { !/HTTP\/1.1/ } split(/<\?xml.*?\?>/, $data) );
 
+    # clean up the dirty xml stanzas sometimes produced in iLO 3.0
+    s{ > [^<]+ \z }{>}mxs for @stanzas;
+
     # @stanzas now contains a number of valid XML sequences.
     # All but one is unnecessary; they contain short status messages and
     # nothing else. So, we want to parse only the longest message.
